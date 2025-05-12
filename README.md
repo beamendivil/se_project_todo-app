@@ -30,6 +30,7 @@ To run this application locally, simply open the `index.html` file in your web b
 - **Completed Counter:** A section displays the number of completed todos out of the total number of todos.
 
 ## File Structure
+
 This project is deployed on GitHub Pages:
 
-- ADD LINK HERE
+https://github.com/beamendivil/se_project_todo-app

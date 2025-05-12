@@ -2,6 +2,12 @@ export default class FormValidator {
   constructor(formElement, config) {
     this._formElement = formElement;
     this._config = config;
+    this._inputList = Array.from(
+      this._formElement.querySelectorAll(this._config.inputSelector)
+    );
+    this._submitButton = this._formElement.querySelector(
+      this._config.submitButtonSelector
+    );
   }
 
   _showInputError(inputElement, errorMessage) {
@@ -31,36 +37,39 @@ export default class FormValidator {
   }
 
   _setEventListeners() {
-    const inputList = Array.from(
-      this._formElement.querySelectorAll(this._config.inputSelector)
-    );
-    const submitButton = this._formElement.querySelector(
-      this._config.submitButtonSelector
-    );
-
-    inputList.forEach((inputElement) => {
+    this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
-        this._toggleButtonState(inputList, submitButton);
+        this._toggleButtonState();
       });
     });
   }
 
-  _toggleButtonState(inputList, buttonElement) {
-    const hasInvalidInput = inputList.some(
+  _toggleButtonState() {
+    const hasInvalidInput = this._inputList.some(
       (inputElement) => !inputElement.validity.valid
     );
 
     if (hasInvalidInput) {
-      buttonElement.classList.add(this._config.inactiveButtonClass);
-      buttonElement.disabled = true;
+      this._submitButton.classList.add(this._config.inactiveButtonClass);
+      this._submitButton.disabled = true;
     } else {
-      buttonElement.classList.remove(this._config.inactiveButtonClass);
-      buttonElement.disabled = false;
+      this._submitButton.classList.remove(this._config.inactiveButtonClass);
+      this._submitButton.disabled = false;
     }
   }
 
   enableValidation() {
     this._setEventListeners();
+  }
+
+  resetValidation() {
+    // Reset input errors
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement);
+    });
+
+    // Reset button state
+    this._toggleButtonState();
   }
 }
