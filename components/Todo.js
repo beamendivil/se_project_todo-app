@@ -8,6 +8,7 @@ export default class Todo {
     date = null,
     priority = "normal", // Default priority
     description = "", // Optional description
+    templateSelector = "#todo-template", // Default template selector
   }) {
     this.id = id || this._generateId(); // Generate a unique ID if not provided
     this.name = name || "Untitled Task"; // Default to "Untitled Task" if no name is provided
@@ -15,6 +16,7 @@ export default class Todo {
     this.date = this._validateDate(date); // Validate and parse date
     this.priority = this._validatePriority(priority); // Validate priority
     this.description = description || ""; // Default to an empty string if not provided
+    this.templateSelector = templateSelector; // Store the template selector
   }
 
   _generateId() {
@@ -33,10 +35,8 @@ export default class Todo {
     const allowedPriorities = ["high", "normal", "low"];
     return allowedPriorities.includes(priority) ? priority : "normal";
   }
-
   createTodoElement() {
-    const template = document.querySelector("#todo-template").content;
-    const todoElement = template.cloneNode(true);
+    const todoElement = template.cloneNode(true).querySelector(".todo");
 
     const todoNameEl = todoElement.querySelector(".todo__name");
     const todoCheckboxEl = todoElement.querySelector(".todo__completed");

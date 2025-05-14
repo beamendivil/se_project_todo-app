@@ -61,9 +61,13 @@ export default class FormValidator {
 
   enableValidation() {
     this._setEventListeners();
+    this._toggleButtonState(); // Ensure the button state is correct on form render
   }
 
   resetValidation() {
+    // Clear the form inputs
+    this._formElement.reset();
+
     // Reset input errors
     this._inputList.forEach((inputElement) => {
       this._hideInputError(inputElement);
