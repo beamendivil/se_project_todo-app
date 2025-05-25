@@ -1,6 +1,6 @@
-import FormValidator from "../components/FormValidator.js";
-import Todo from "../components/Todo.js";
-import { initialTodos, validationConfig } from "../utils/constants.js";
+import FormValidator from "../components/FormValidator.js"; // Updated path
+import Todo from "../components/Todo.js"; // Updated path
+import { initialTodos, validationConfig } from "./constants.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
@@ -37,30 +37,39 @@ addTodoForm.addEventListener("submit", (evt) => {
   console.log("Form submitted");
 
   const name = evt.target.name.value;
-  console.log("Task Name:", name);
-
   const dateInput = evt.target.date.value;
-  console.log("Date Input:", dateInput);
+  console.log("Form values:", { name, dateInput });
 
   const date = dateInput ? new Date(dateInput) : null;
   if (date) {
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    console.log("Adjusted date:", date);
   }
 
-  const newTodo = new Todo({
-    name,
-    date,
-    completed: false,
-    priority: "normal",
-    description: evt.target.description?.value || "",
-  });
+  try {
+    // Directly pass the form data to renderTodo
+    renderTodo({
+      name,
+      date,
+      completed: false,
+      priority: "normal",
+      description: evt.target.description?.value || "",
+    });
 
-  const todoElement = newTodo.createTodoElement();
-  todosList.append(todoElement);
+    console.log("Todo successfully rendered");
 
-  evt.target.reset();
-  formValidator.resetValidation();
-  closeModal(addTodoPopup);
+    evt.target.reset(); // Reset the form fields
+    console.log("Form reset");
+
+    formValidator.resetValidation(); // Reset validation state
+    console.log("Validation state reset");
+
+    closeModal(addTodoPopup); // Close the popup
+    console.log("Popup closed");
+  } catch (error) {
+    console.error("An error occurred while adding the todo:", error.message);
+    alert("Something went wrong while adding your todo. Please try again.");
+  }
 });
 
 // Render initial todos
@@ -69,8 +78,15 @@ initialTodos.forEach((item) => {
 });
 
 // Select the form element
-const formElement = document.querySelector("#add-todo-form");
 
-// Initialize the FormValidator
-const formValidator = new FormValidator(formElement, validationConfig);
-formValidator.enableValidation();
+document.addEventListener("DOMContentLoaded", () => {
+  const formElement = document.querySelector("#add-todo-form");
+  console.log("Form Element:", formElement); // Debugging
+
+  if (formElement) {
+    const formValidator = new FormValidator(validationConfig, formElement);
+    formValidator.enableValidation();
+  } else {
+    console.error("Form element not found. Ensure the form exists in the DOM.");
+  }
+});

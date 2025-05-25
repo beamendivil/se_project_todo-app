@@ -1,10 +1,12 @@
 .todo {
-  font-family: Inter, Arial, sans-serif;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 12px;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
 }
 
 .todo__label {
@@ -27,28 +29,23 @@
 .todo__completed:checked {
   border: none;
   background-size: contain;
-  background-image: url(../images/checkbox.svg);
+  background-image: url(/images/checkbox.svg);
 }
 
 .todo__name {
+  font-size: 16px;
   font-weight: 500;
-  color: #181818;
-  font-size: 20px;
-  line-height: 1.2;
-
-  /* Truncate text with ellipses, maximum of two rows. */
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
 .todo__date {
-  font-weight: 400;
+  font-size: 14px;
   color: #7d7d7d;
-  font-size: 20px;
-  line-height: 1.2;
   flex-shrink: 0;
 }
 
@@ -60,18 +57,16 @@
 }
 
 .todo__delete-btn {
+  font-size: 14px;
+  color: #ff4d4d;
+  background: none;
   border: none;
-  padding: 0;
-  background-color: transparent;
-  font-size: 16px;
-  line-height: 1.2;
-  font-weight: 500;
-  color: #f44;
   cursor: pointer;
+  background: transparent;
 }
 
-.todo__delete-btn::before {
-  content: "Delete";
+.todo__delete-btn:hover {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 630px) {

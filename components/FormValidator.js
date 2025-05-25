@@ -1,7 +1,7 @@
 export default class FormValidator {
-  constructor(formElement, config) {
-    this._formElement = formElement;
-    this._config = config;
+  constructor(config, formElement) {
+    this._config = config; // Accept settings object
+    this._formElement = formElement; // Accept form element
     this._inputList = Array.from(
       this._formElement.querySelectorAll(this._config.inputSelector)
     );
@@ -10,6 +10,7 @@ export default class FormValidator {
     );
   }
 
+  // Private method to show input error
   _showInputError(inputElement, errorMessage) {
     const errorElement = this._formElement.querySelector(
       `#${inputElement.id}-error`
@@ -19,6 +20,7 @@ export default class FormValidator {
     errorElement.classList.add(this._config.errorClass);
   }
 
+  // Private method to hide input error
   _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(
       `#${inputElement.id}-error`
@@ -28,6 +30,7 @@ export default class FormValidator {
     errorElement.classList.remove(this._config.errorClass);
   }
 
+  // Private method to check input validity
   _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
       this._showInputError(inputElement, inputElement.validationMessage);
@@ -36,15 +39,7 @@ export default class FormValidator {
     }
   }
 
-  _setEventListeners() {
-    this._inputList.forEach((inputElement) => {
-      inputElement.addEventListener("input", () => {
-        this._checkInputValidity(inputElement);
-        this._toggleButtonState();
-      });
-    });
-  }
-
+  // Private method to toggle button state
   _toggleButtonState() {
     const hasInvalidInput = this._inputList.some(
       (inputElement) => !inputElement.validity.valid
@@ -59,11 +54,23 @@ export default class FormValidator {
     }
   }
 
-  enableValidation() {
-    this._setEventListeners();
-    this._toggleButtonState(); // Ensure the button state is correct on form render
+  // Private method to set event listeners
+  _setEventListeners() {
+    this._inputList.forEach((inputElement) => {
+      inputElement.addEventListener("input", () => {
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState();
+      });
+    });
   }
 
+  // Public method to enable validation
+  enableValidation() {
+    this._setEventListeners();
+    this._toggleButtonState(); // Ensure button state is correct on initialization
+  }
+
+  // Public method to reset validation
   resetValidation() {
     // Clear the form inputs
     this._formElement.reset();

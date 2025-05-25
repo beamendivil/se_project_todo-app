@@ -4,18 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple ToDo App</title>
+    <!-- Correct path to index.css -->
     <link rel="stylesheet" href="./pages/index.css" />
   </head>
-
   <body>
     <div class="page">
       <div class="page__content">
         <header class="header">
           <h1 class="header__title">The Simple ToDo App</h1>
           <p class="header__banner">Do these things</p>
-          <button class="button button_action_add header__button">
-            + Add Todo
-          </button>
+          <button class="button button_action_add">+ Add Todo</button>
           <div class="popup" id="add-todo-popup">
             <div class="popup__content">
               <h3 class="popup__title">Add new ToDo</h3>
@@ -24,12 +22,7 @@
                 class="popup__close"
                 type="button"
               ></button>
-              <form
-                class="popup__form"
-                name="add-todo-form"
-                id="add-todo-form"
-                novalidate
-              >
+              <form class="popup__form" id="add-todo-form" novalidate>
                 <fieldset class="popup__fieldset">
                   <label class="popup__label" for="todo-name">
                     What needs to be done?
@@ -79,7 +72,6 @@
                     <span class="todo__date"></span>
                   </label>
                   <ul class="todo__buttons">
-                    <!-- List is used to support future additional buttons -->
                     <li>
                       <button class="todo__delete-btn" type="button">
                         Delete
@@ -93,6 +85,7 @@
         </main>
       </div>
     </div>
+    <!-- Correct path to index.js -->
     <script src="./pages/index.js" type="module"></script>
   </body>
 </html>

@@ -26,3 +26,14 @@
     padding: 20px 12px;
   }
 }
+
+@media (max-width: 768px) {
+  .page__content {
+    padding: 10px;
+  }
+
+  .button {
+    width: 100%;
+    text-align: center;
+  }
+}

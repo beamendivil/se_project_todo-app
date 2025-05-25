@@ -1,10 +1,18 @@
 .button {
-  background-color: #5877e7;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  background-color: #4460c4;
-  cursor: pointer;
+  background-color: #0056b3;
 }
 
 .button:active {
@@ -23,11 +31,16 @@
   border: 2px solid #fff;
   transition: 0.3s;
   cursor: pointer;
-  font-family: Inter, Arial, sans-serif;
+  font-family: "Inter, Arial, sans-serif";
   color: #fff;
   font-size: 20px;
   line-height: 1.2;
   font-weight: 600;
+  margin-left: auto; /* Push the button to the far right */
+}
+
+.button_action_add:hover {
+  background-color: #0056b3;
 }
 
 @media screen and (max-width: 630px) {
