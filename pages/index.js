@@ -1,5 +1,5 @@
-import FormValidator from "../components/FormValidator.js"; // Updated path
-import Todo from "../components/Todo.js"; // Updated path
+import FormValidator from "../components/FormValidator.js";
+import Todo from "../components/Todo.js";
 import { initialTodos, validationConfig } from "./constants.js";
 
 const addTodoButton = document.querySelector(".button_action_add");
@@ -7,6 +7,8 @@ const addTodoPopup = document.querySelector("#add-todo-popup");
 const addTodoForm = addTodoPopup.querySelector(".popup__form");
 const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
 const todosList = document.querySelector(".todos__list");
+
+let formValidator; // Declare formValidator globally
 
 const openModal = (modal) => {
   modal.classList.add("popup_visible");
@@ -47,7 +49,6 @@ addTodoForm.addEventListener("submit", (evt) => {
   }
 
   try {
-    // Directly pass the form data to renderTodo
     renderTodo({
       name,
       date,
@@ -59,8 +60,6 @@ addTodoForm.addEventListener("submit", (evt) => {
     console.log("Todo successfully rendered");
 
     evt.target.reset(); // Reset the form fields
-    console.log("Form reset");
-
     formValidator.resetValidation(); // Reset validation state
     console.log("Validation state reset");
 
@@ -77,14 +76,13 @@ initialTodos.forEach((item) => {
   renderTodo(item);
 });
 
-// Select the form element
-
+// Initialize formValidator inside DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   const formElement = document.querySelector("#add-todo-form");
   console.log("Form Element:", formElement); // Debugging
 
   if (formElement) {
-    const formValidator = new FormValidator(validationConfig, formElement);
+    formValidator = new FormValidator(validationConfig, formElement); // Initialize formValidator
     formValidator.enableValidation();
   } else {
     console.error("Form element not found. Ensure the form exists in the DOM.");

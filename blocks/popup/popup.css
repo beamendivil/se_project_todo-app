@@ -23,10 +23,6 @@
   width: 100%;
   max-width: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Spread elements across the container */
-  flex-wrap: wrap; /* Ensure elements wrap on smaller screens */
 }
 
 .popup__title {
