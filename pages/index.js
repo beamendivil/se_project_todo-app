@@ -1,6 +1,6 @@
 import FormValidator from "../components/FormValidator.js";
 import Todo from "../components/Todo.js";
-import { initialTodos, validationConfig } from "./constants.js";
+import { initialTodos, validationConfig } from "../utils/constants.js"; // Updated path
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
