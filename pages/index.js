@@ -1,90 +1,87 @@
-import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
 import Todo from "../components/Todo.js";
-import { initialTodos, validationConfig } from "../utils/constants.js"; // Updated path
+import TodoCounter from "../components/TodoCounter.js";
+import { initialTodos } from "../utils/constants.js";
 
+const todosList = document.querySelector(".todos__list");
+const addTodoForm = document.querySelector("#add-todo-form");
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = addTodoPopup.querySelector(".popup__form");
-const addTodoCloseBtn = addTodoPopup.querySelector(".popup__close");
-const todosList = document.querySelector(".todos__list");
+const addTodoCloseBtn = document.querySelector(".popup__close");
 
-let formValidator; // Declare formValidator globally
+// Initialize the TodoCounter
+const todoCounter = new TodoCounter({
+  totalSelector: ".counter__total",
+  incompleteSelector: ".counter__incomplete",
+});
 
-const openModal = (modal) => {
-  modal.classList.add("popup_visible");
+// State array to track current todos
+let currentTodos = [...initialTodos];
+
+// Function to update the counts
+const updateTodoCounts = () => {
+  todoCounter.updateCounts(currentTodos); // Use the state array
 };
 
-const closeModal = (modal) => {
-  modal.classList.remove("popup_visible");
-};
-
-// Function to render a todo using the Todo class
+// Function to render a single todo
 const renderTodo = (data) => {
-  const todo = new Todo(data); // Create a new Todo instance
-  const todoElement = todo.createTodoElement(); // Generate the DOM element
-  todosList.append(todoElement); // Append it to the list
+  const todo = new Todo({
+    ...data,
+    onUpdate: (updatedTodo) => {
+      // Update the corresponding todo in the state array
+      const index = currentTodos.findIndex(
+        (todo) => todo.id === updatedTodo.id
+      );
+      if (index !== -1) {
+        currentTodos[index] = updatedTodo;
+      }
+      updateTodoCounts(); // Update the counter
+    },
+  });
+
+  const todoElement = todo.createTodoElement();
+  todosSection.addItem(todoElement);
 };
 
+// Initialize the Section class
+const todosSection = new Section({
+  items: initialTodos,
+  renderer: renderTodo,
+  containerSelector: ".todos__list",
+});
+
+// Render all initial todos on page load
+todosSection.renderItems();
+updateTodoCounts(); // Update counts after rendering initial todos
+
+// Open the popup when the "Add Todo" button is clicked
 addTodoButton.addEventListener("click", () => {
-  console.log("Add Todo button clicked");
-  openModal(addTodoPopup);
+  addTodoPopup.classList.add("popup_visible");
 });
 
+// Close the popup when the close button is clicked
 addTodoCloseBtn.addEventListener("click", () => {
-  closeModal(addTodoPopup);
+  addTodoPopup.classList.remove("popup_visible");
 });
 
+// Handle form submission
 addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  console.log("Form submitted");
-
   const name = evt.target.name.value;
   const dateInput = evt.target.date.value;
-  console.log("Form values:", { name, dateInput });
-
   const date = dateInput ? new Date(dateInput) : null;
-  if (date) {
-    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-    console.log("Adjusted date:", date);
-  }
 
-  try {
-    renderTodo({
-      name,
-      date,
-      completed: false,
-      priority: "normal",
-      description: evt.target.description?.value || "",
-    });
+  const newTodoData = {
+    name,
+    date,
+    completed: false,
+    priority: "normal",
+    description: evt.target.description?.value || "",
+  };
 
-    console.log("Todo successfully rendered");
-
-    evt.target.reset(); // Reset the form fields
-    formValidator.resetValidation(); // Reset validation state
-    console.log("Validation state reset");
-
-    closeModal(addTodoPopup); // Close the popup
-    console.log("Popup closed");
-  } catch (error) {
-    console.error("An error occurred while adding the todo:", error.message);
-    alert("Something went wrong while adding your todo. Please try again.");
-  }
-});
-
-// Render initial todos
-initialTodos.forEach((item) => {
-  renderTodo(item);
-});
-
-// Initialize formValidator inside DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
-  const formElement = document.querySelector("#add-todo-form");
-  console.log("Form Element:", formElement); // Debugging
-
-  if (formElement) {
-    formValidator = new FormValidator(validationConfig, formElement); // Initialize formValidator
-    formValidator.enableValidation();
-  } else {
-    console.error("Form element not found. Ensure the form exists in the DOM.");
-  }
+  currentTodos.push(newTodoData); // Add the new todo to the state array
+  renderTodo(newTodoData); // Render the new todo
+  updateTodoCounts(); // Update counts after adding a new todo
+  evt.target.reset(); // Reset the form
+  addTodoPopup.classList.remove("popup_visible"); // Close the popup
 });

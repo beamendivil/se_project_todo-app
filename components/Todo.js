@@ -9,6 +9,7 @@ export default class Todo {
     priority = "normal",
     description = "",
     templateSelector = "#todo-template",
+    onUpdate = null, // Add the callback parameter
   }) {
     this.id = id || uuidv4();
     this.name = name;
@@ -17,6 +18,7 @@ export default class Todo {
     this.priority = priority;
     this.description = description;
     this.templateSelector = templateSelector;
+    this.onUpdate = onUpdate; // Store the callback
   }
 
   createTodoElement() {
@@ -70,8 +72,19 @@ export default class Todo {
     });
 
     todoCheckboxEl.addEventListener("change", () => {
-      this.completed = todoCheckboxEl.checked;
+      this.completed = todoCheckboxEl.checked; // Update the completed status
       todoElement.classList.toggle("todo_completed", this.completed);
+
+      if (this.onUpdate) {
+        this.onUpdate({
+          id: this.id,
+          name: this.name,
+          completed: this.completed,
+          date: this.date,
+          priority: this.priority,
+          description: this.description,
+        }); // Invoke the callback with the updated todo data
+      }
     });
 
     return todoElement;

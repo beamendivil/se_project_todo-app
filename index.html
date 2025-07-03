@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple ToDo App</title>
-    <!-- Correct path to index.css -->
     <link rel="stylesheet" href="./pages/index.css" />
   </head>
   <body>
@@ -60,7 +59,10 @@
         </header>
         <main>
           <section class="counter">
-            <h2 class="counter__text">Showing X out of Y completed</h2>
+            <h2 class="counter__text">
+              <span class="counter__total">Total: 0</span>
+              <span class="counter__incomplete">Incomplete: 0</span>
+            </h2>
           </section>
           <section class="todos">
             <ul class="todos__list">
@@ -85,7 +87,6 @@
         </main>
       </div>
     </div>
-    <!-- Correct path to index.js -->
     <script src="./pages/index.js" type="module"></script>
   </body>
 </html>
