@@ -28,14 +28,30 @@
                     <input
                       class="popup__input"
                       id="todo-name"
+                      name="name"
                       maxlength="40"
                       minlength="2"
-                      name="name"
                       placeholder="Write here"
                       required
                       type="text"
                     />
                     <span class="popup__error" id="todo-name-error"></span>
+                  </label>
+                  <label class="popup__label" for="todo-description">
+                    Description
+                    <input
+                      class="popup__input"
+                      id="todo-description"
+                      name="description"
+                      maxlength="100"
+                      placeholder="Description"
+                      required
+                      type="text"
+                    />
+                    <span
+                      class="popup__error"
+                      id="todo-description-error"
+                    ></span>
                   </label>
                   <label class="popup__label" for="todo-date">
                     When does it need to be done? (optional)

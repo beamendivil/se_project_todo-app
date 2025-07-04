@@ -4,21 +4,23 @@ export default class Todo {
   constructor({
     id = null,
     name = "Untitled Task",
-    completed = false,
-    date = null,
-    priority = "normal",
     description = "",
+    date = null,
+    completed = false,
+    priority = "normal",
     templateSelector = "#todo-template",
     onUpdate = null, // Add the callback parameter
+    onDelete = null,
   }) {
     this.id = id || uuidv4();
     this.name = name;
-    this.completed = completed;
-    this.date = date ? new Date(date) : null;
-    this.priority = priority;
     this.description = description;
+    this.date = date ? new Date(date) : null;
+    this.completed = completed;
+    this.priority = priority;
     this.templateSelector = templateSelector;
     this.onUpdate = onUpdate; // Store the callback
+    this.onDelete = onDelete;
   }
 
   createTodoElement() {
@@ -33,12 +35,10 @@ export default class Todo {
     const template = templateElement.content;
     const todoElement = template.cloneNode(true).querySelector(".todo");
 
-    if (!todoElement) {
-      throw new Error(
-        `The template does not contain an element with the class "todo".`
-      );
-    }
+    // Set data-id for deletion
+    todoElement.setAttribute("data-id", this.id);
 
+    // Set up fields
     const todoNameEl = todoElement.querySelector(".todo__name");
     const todoCheckboxEl = todoElement.querySelector(".todo__completed");
     const todoLabel = todoElement.querySelector(".todo__label");
@@ -56,9 +56,9 @@ export default class Todo {
         month: "short",
         day: "numeric",
       })}`;
+    } else {
+      todoDateEl.textContent = "";
     }
-
-    todoElement.classList.add(`todo_priority_${this.priority}`);
 
     if (this.description) {
       const todoDescriptionEl = document.createElement("p");
@@ -67,23 +67,26 @@ export default class Todo {
       todoElement.appendChild(todoDescriptionEl);
     }
 
-    todoDeleteBtn.addEventListener("click", () => {
-      todoElement.remove();
-    });
-
+    // Checkbox toggle
     todoCheckboxEl.addEventListener("change", () => {
-      this.completed = todoCheckboxEl.checked; // Update the completed status
+      this.completed = todoCheckboxEl.checked;
       todoElement.classList.toggle("todo_completed", this.completed);
-
       if (this.onUpdate) {
         this.onUpdate({
           id: this.id,
           name: this.name,
-          completed: this.completed,
-          date: this.date,
-          priority: this.priority,
           description: this.description,
-        }); // Invoke the callback with the updated todo data
+          date: this.date,
+          completed: this.completed,
+          priority: this.priority,
+        });
+      }
+    });
+
+    // Delete button
+    todoDeleteBtn.addEventListener("click", () => {
+      if (this.onDelete) {
+        this.onDelete(this.id);
       }
     });
 
