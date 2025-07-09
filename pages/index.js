@@ -4,6 +4,7 @@ import TodoCounter from "../components/TodoCounter.js";
 import PopupWithForms from "../components/PopupWithForms.js";
 import FormValidator from "../components/FormValidator.js";
 import { initialTodos, validationConfig } from "../utils/constants.js";
+import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 // State array to track current todos
 let currentTodos = [...initialTodos];
@@ -18,15 +19,6 @@ const todoCounter = new TodoCounter({
 const updateTodoCounts = () => {
   todoCounter.updateCounts(currentTodos);
 };
-
-// Function to generate a UUID (RFC4122 version 4 compliant)
-function generateUUID() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0,
-      v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
 
 // Handle delete
 function handleDeleteTodo(todoId) {
@@ -58,7 +50,6 @@ const renderTodo = (data) => {
 
   const todoElement = todo.createTodoElement();
   // Ensure the element has a data-id attribute for deletion
-  todoElement.setAttribute("data-id", data.id);
   todosSection.addItem(todoElement);
 };
 
@@ -79,13 +70,14 @@ updateTodoCounts();
 const addTodoPopup = new PopupWithForms({
   popupSelector: "#add-todo-popup",
   handleFormSubmit: (formData) => {
+    console.log(formData); // Debug: see if this runs and what data you get
     const title = formData.name.trim();
     const description = formData.description?.trim() || "";
     const dateInput = formData.date;
     const date = dateInput ? new Date(dateInput) : null;
 
     const newTodoData = {
-      id: generateUUID(),
+      id: uuidv4(),
       name: title,
       description,
       date,
@@ -99,6 +91,9 @@ const addTodoPopup = new PopupWithForms({
     addTodoPopup.close();
   },
 });
+
+// Call this immediately after instantiation:
+addTodoPopup.setEventListeners();
 
 // Open the popup when the "Add Todo" button is clicked
 const addTodoButton = document.querySelector(".button_action_add");
@@ -119,5 +114,4 @@ function rerenderTodos() {
 }
 
 // Export for debugging (optional)
-window.currentTodos = currentTodos;
 window.rerenderTodos = rerenderTodos;
