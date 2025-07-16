@@ -69,5 +69,4 @@ This project is designed to demonstrate modular JavaScript, dynamic DOM manipula
 ## File Structure
 
 This project is deployed on GitHub Pages:
-
-https://github.com/beamendivil/se_project_todo-app
+https://beamendivil.github.io/se_project_todo-app/

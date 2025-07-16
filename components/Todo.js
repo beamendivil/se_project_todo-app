@@ -9,7 +9,7 @@ export default class Todo {
     completed = false,
     priority = "normal",
     templateSelector = "#todo-template",
-    onUpdate = null, // Add the callback parameter
+    onUpdate = null,
     onDelete = null,
   }) {
     this.id = id || uuidv4();
@@ -19,8 +19,16 @@ export default class Todo {
     this.completed = completed;
     this.priority = priority;
     this.templateSelector = templateSelector;
-    this.onUpdate = onUpdate; // Store the callback
+    this.onUpdate = onUpdate;
     this.onDelete = onDelete;
+
+    // Element references (will be set in createTodoElement)
+    this.todoElement = null;
+    this.todoNameEl = null;
+    this.todoCheckboxEl = null;
+    this.todoLabel = null;
+    this.todoDateEl = null;
+    this.todoDeleteBtn = null;
   }
 
   createTodoElement() {
@@ -33,44 +41,44 @@ export default class Todo {
     }
 
     const template = templateElement.content;
-    const todoElement = template.cloneNode(true).querySelector(".todo");
+    this.todoElement = template.cloneNode(true).querySelector(".todo");
 
     // Set data-id for deletion
-    todoElement.setAttribute("data-id", this.id);
+    this.todoElement.setAttribute("data-id", this.id);
 
     // Set up fields
-    const todoNameEl = todoElement.querySelector(".todo__name");
-    const todoCheckboxEl = todoElement.querySelector(".todo__completed");
-    const todoLabel = todoElement.querySelector(".todo__label");
-    const todoDateEl = todoElement.querySelector(".todo__date");
-    const todoDeleteBtn = todoElement.querySelector(".todo__delete-btn");
+    this.todoNameEl = this.todoElement.querySelector(".todo__name");
+    this.todoCheckboxEl = this.todoElement.querySelector(".todo__completed");
+    this.todoLabel = this.todoElement.querySelector(".todo__label");
+    this.todoDateEl = this.todoElement.querySelector(".todo__date");
+    this.todoDeleteBtn = this.todoElement.querySelector(".todo__delete-btn");
 
-    todoNameEl.textContent = this.name;
-    todoCheckboxEl.checked = this.completed;
-    todoCheckboxEl.id = this.id;
-    todoLabel.setAttribute("for", this.id);
+    this.todoNameEl.textContent = this.name;
+    this.todoCheckboxEl.checked = this.completed;
+    this.todoCheckboxEl.id = this.id;
+    this.todoLabel.setAttribute("for", this.id);
 
     if (this.date) {
-      todoDateEl.textContent = `Due: ${this.date.toLocaleString("en-US", {
+      this.todoDateEl.textContent = `Due: ${this.date.toLocaleString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
       })}`;
     } else {
-      todoDateEl.textContent = "";
+      this.todoDateEl.textContent = "";
     }
 
     if (this.description) {
       const todoDescriptionEl = document.createElement("p");
       todoDescriptionEl.textContent = this.description;
       todoDescriptionEl.classList.add("todo__description");
-      todoElement.appendChild(todoDescriptionEl);
+      this.todoElement.appendChild(todoDescriptionEl);
     }
 
     // Checkbox toggle
-    todoCheckboxEl.addEventListener("change", () => {
-      this.completed = todoCheckboxEl.checked;
-      todoElement.classList.toggle("todo_completed", this.completed);
+    this.todoCheckboxEl.addEventListener("change", () => {
+      this.completed = this.todoCheckboxEl.checked;
+      this.todoElement.classList.toggle("todo_completed", this.completed);
       if (this.onUpdate) {
         this.onUpdate({
           id: this.id,
@@ -84,12 +92,12 @@ export default class Todo {
     });
 
     // Delete button
-    todoDeleteBtn.addEventListener("click", () => {
+    this.todoDeleteBtn.addEventListener("click", () => {
       if (this.onDelete) {
         this.onDelete(this.id);
       }
     });
 
-    return todoElement;
+    return this.todoElement;
   }
 }

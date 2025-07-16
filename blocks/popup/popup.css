@@ -37,7 +37,7 @@
   padding: 0;
   top: 10px;
   right: 10px;
-  background: transparent url(../../images/close.svg) no-repeat center center; /* Updated to relative path */
+  background: transparent url("../../images/close.svg") no-repeat center center;
   border: none;
   font-size: 20px;
   cursor: pointer;

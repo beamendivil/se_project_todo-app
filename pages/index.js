@@ -102,7 +102,7 @@ addTodoButton.addEventListener("click", () => {
 });
 
 // Form validation
-const addTodoForm = document.querySelector("#add-todo-form");
+const addTodoForm = document.forms["add-todo-form"];
 const addTodoFormValidator = new FormValidator(validationConfig, addTodoForm);
 addTodoFormValidator.enableValidation();
 
