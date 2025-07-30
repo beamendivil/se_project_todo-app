@@ -10,12 +10,12 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 let currentTodos = [...initialTodos];
 
 // Initialize the TodoCounter
-const todoCounter = new TodoCounter({
-  totalSelector: ".counter__total",
-  incompleteSelector: ".counter__incomplete",
-});
+const todoCounter = new TodoCounter(
+  currentTodos,
+  ".counter__total",
+  ".counter__incomplete"
+);
 
-// Function to update the counts
 const updateTodoCounts = () => {
   todoCounter.updateCounts(currentTodos);
 };
@@ -115,3 +115,4 @@ function rerenderTodos() {
 
 // Export for debugging (optional)
 window.rerenderTodos = rerenderTodos;
+

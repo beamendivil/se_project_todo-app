@@ -29,7 +29,7 @@
 .todo__completed:checked {
   border: none;
   background-size: contain;
-  background-image: url("../../images/checkbox.svg")
+  background-image: url("../../images/checkbox.svg");
 }
 
 .todo__name {
@@ -93,7 +93,6 @@
   }
 
   .todo__delete-btn {
-    background-image: url(../images/delete-icon.svg);
     width: 24px;
     height: 24px;
   }
