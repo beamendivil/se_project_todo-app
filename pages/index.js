@@ -66,6 +66,11 @@ updateTodoCounts();
 
 // --- Popup and Form Handling ---
 
+// Form validation setup (must be before PopupWithForms)
+const addTodoForm = document.forms["add-todo-form"];
+const addTodoFormValidator = new FormValidator(validationConfig, addTodoForm);
+addTodoFormValidator.enableValidation();
+
 // PopupWithForms instance for the add-todo popup
 const addTodoPopup = new PopupWithForms({
   popupSelector: "#add-todo-popup",
@@ -89,6 +94,7 @@ const addTodoPopup = new PopupWithForms({
     renderTodo(newTodoData);
     updateTodoCounts();
     addTodoPopup.close();
+    addTodoFormValidator.resetValidation();
   },
 });
 
@@ -101,11 +107,6 @@ addTodoButton.addEventListener("click", () => {
   addTodoPopup.open();
 });
 
-// Form validation
-const addTodoForm = document.forms["add-todo-form"];
-const addTodoFormValidator = new FormValidator(validationConfig, addTodoForm);
-addTodoFormValidator.enableValidation();
-
 // --- Utility: Re-render all todos (if needed) ---
 function rerenderTodos() {
   document.querySelector(".todos__list").innerHTML = "";
@@ -115,4 +116,3 @@ function rerenderTodos() {
 
 // Export for debugging (optional)
 window.rerenderTodos = rerenderTodos;
-
