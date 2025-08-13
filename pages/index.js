@@ -75,8 +75,9 @@ addTodoFormValidator.enableValidation();
 const addTodoPopup = new PopupWithForms({
   popupSelector: "#add-todo-popup",
   handleFormSubmit: (formData) => {
-    console.log(formData); // Debug: see if this runs and what data you get
-    const title = formData.name.trim();
+    const title = formData.name?.trim();
+    if (!title) return;
+
     const description = formData.description?.trim() || "";
     const dateInput = formData.date;
     const date = dateInput ? new Date(dateInput) : null;
@@ -98,21 +99,11 @@ const addTodoPopup = new PopupWithForms({
   },
 });
 
-// Call this immediately after instantiation:
-addTodoPopup.setEventListeners();
-
 // Open the popup when the "Add Todo" button is clicked
 const addTodoButton = document.querySelector(".button_action_add");
 addTodoButton.addEventListener("click", () => {
   addTodoPopup.open();
 });
-
-// --- Utility: Re-render all todos (if needed) ---
-function rerenderTodos() {
-  document.querySelector(".todos__list").innerHTML = "";
-  currentTodos.forEach(renderTodo);
-  updateTodoCounts();
-}
-
-// Export for debugging (optional)
-window.rerenderTodos = rerenderTodos;
+addTodoButton.addEventListener("click", () => {
+  addTodoPopup.open();
+});
